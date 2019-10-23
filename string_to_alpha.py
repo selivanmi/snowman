@@ -1,10 +1,12 @@
-str = "mother cleans the window"
+"""This module provides a function that tokenizes the given text string"""
 
 def process_string(str):
     """
-    This function accepts a sentence and return list of words it is made of.
+    This function accepts a text string 
+    and returns a list of words it consists of.
+    Word is a text string which consists only of letters.
     @param str: Text string to process
-    @return: List of words
+    @return: A list of words
     """
     result = []
     alphaIdx = -1  # Value -1 means that the current character is not a letter
@@ -19,7 +21,8 @@ def process_string(str):
                 alphaIdx = -1
         i += 1
     if alphaIdx > -1:
-         result.append(str[alphaIdx:i])
+        # We check if the last character is a letter
+        # If it is true, we add the substring to the list of words
+        result.append(str[alphaIdx:i])
     return result
             
-print(process_string(str))
