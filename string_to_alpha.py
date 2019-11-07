@@ -1,6 +1,7 @@
 """This module provides a function that tokenizes the given text string"""
 
 class StringTokenizer:
+    """This class tokenizes the string using the method 'process_string'"""
     def process_string(str):
         """
         This function accepts a text string 
