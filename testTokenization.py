@@ -27,4 +27,6 @@ class TestStringMethods(unittest.TestCase):
                        ['mother', 'cleans', 'the', 'window'])
         
 if __name__ == '__main__':
+    str = "mother cleans the window"
+    print(string_to_alpha.StringTokenizer.process_string(str))
     unittest.main()
