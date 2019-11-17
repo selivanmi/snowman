@@ -58,10 +58,12 @@ class StringTokenizer(object):
 def main():
     t = StringTokenizer()
     string = 'mother clears the window'
-    print(t.tokenize(str))
+    print(t.tokenize(string))
     result = process_string(string)
     print(result)
 
 if __name__ == '__main__':
     main()
+
+
 
