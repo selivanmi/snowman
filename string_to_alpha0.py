@@ -84,14 +84,15 @@ class StringTokenizer(object):
         i = 0          # Index of the current character
         cur_token_type = TokenType.UNKNOWN
         for char in string:
+            char_type = self.get_char_type(char)
             if i == 0:    #Initialize variables for first character of string
-                cur_token_type = self.get_char_type(char)
+                cur_token_type = char_type
                 begin_idx = 0
-            elif cur_token_type != self.get_char_type(char): #currently analyzed character is of different type
-                    #Add current token to result list and start new token
-                    result.append(Token(string[begin_idx:i], cur_token_type, begin_idx, i))
-                    begin_idx = i
-                    cur_token_type = self.get_char_type(char)
+            elif cur_token_type != char_type: #currently analyzed character is of different type
+                #Add current token to result list and start new token
+                result.append(Token(string[begin_idx:i], cur_token_type, begin_idx, i))
+                begin_idx = i
+                cur_token_type = char_type
 
             i += 1
         #Add last token to result list
