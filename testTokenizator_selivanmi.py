@@ -42,6 +42,12 @@ class TestStringTokenizerWithTypes(unittest.TestCase):
           self.assertEqual(self.t.tokenize_with_token_types(s)[9],
                        Token("???", TokenType.PUNCTUATION, 27, 30))
           self.assertEqual(len(self.t.tokenize_with_token_types(s)), 10)
+          
+     def test_alpha_string(self):
+          s = 'мама мыла раму'
+          self.assertEqual(self.t.tokenize_with_token_types(s)[0],
+                       Token("мама", TokenType.ALPHA, 0, 4))
+          self.assertEqual(len(self.t.tokenize_with_token_types(s)), 5)
 
           
 class TestStringTokenizer(unittest.TestCase):
