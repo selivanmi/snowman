@@ -1,4 +1,5 @@
 from enum import Enum
+import unicodedata
 
 """This module contains methods and a function
 that tokenizes the given text string"""
@@ -57,14 +58,15 @@ class StringTokenizer(object):
            result.append(string[alphaIdx:i])
          return result
 
-    def get_char_type(self, char):
+    @staticmethod
+    def get_char_type(char):
         if char.isalpha():
             return TokenType.ALPHA
         if char.isdigit():
             return TokenType.NUMBER
         if char.isspace():
             return TokenType.SPACE
-        if (',.?!"\':;-()[]'.find(char) > -1):
+        if (unicodedata.category(char)[0] == 'P'):
             return TokenType.PUNCTUATION
         return TokenType.UNKNOWN
             
