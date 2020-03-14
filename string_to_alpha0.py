@@ -101,6 +101,91 @@ class StringTokenizer(object):
         result.append(Token(string[begin_idx:], cur_token_type, begin_idx, len(string))) 
         return result
 
+
+class StringTokenGenerator(object):
+    """This class tokenizes the string using the method 'process_string'"""
+    def tokenize_gen(self,string):
+         """
+         This method accepts a text string
+         and generates list of words it consists of.
+         Word is a text string which consists only of letters.
+         @param str: Text string to process
+         @yield: A list of words
+         """
+         result = []
+         alphaIdx = -1  # Value -1 means that the current character is not a letter
+         i = 0          # Index of the current character
+         for char in string:
+             if char.isalpha():
+                 if alphaIdx < 0:
+                     alphaIdx = i
+             else:
+                 if alphaIdx > -1:
+                    yield string[alphaIdx:i]
+                    alphaIdx = -1
+             i += 1
+         if alphaIdx > -1:
+           # We check if the last character is a letter
+           # If it is true, we add the substring to the list of words
+           yield string[alphaIdx:i]
+
+    @staticmethod
+    def get_char_type(char):
+        if char.isalpha():
+            return TokenType.ALPHA
+        if char.isdigit():
+            return TokenType.NUMBER
+        if char.isspace():
+            return TokenType.SPACE
+        if (unicodedata.category(char)[0] == 'P'):
+            return TokenType.PUNCTUATION
+        return TokenType.UNKNOWN
+            
+    def tokenize_gen_with_token_types(self, string):
+        """
+        This method splits original string into tokens, 
+        determines token types and generates list of tokens
+        @param string: a sequence of characters to be tokenized
+        @yield list of objects containing token information - class Token:
+        - Token;
+        - Token type;
+        - First and last indexes in original string
+        """
+        if len(string) == 0:
+            return []
+        result = []
+        i = 0          # Index of the current character
+        cur_token_type = TokenType.UNKNOWN
+        for char in string:
+            char_type = self.get_char_type(char)
+            if i == 0:    #Initialize variables for first character of string
+                cur_token_type = char_type
+                begin_idx = 0
+            elif cur_token_type != char_type: #currently analyzed character is of different type
+                #Add current token to result list and start new token
+                yield Token(string[begin_idx:i], cur_token_type, begin_idx, i)
+                begin_idx = i
+                cur_token_type = char_type
+
+            i += 1
+        #Add last token to result list
+        yield Token(string[begin_idx:], cur_token_type, begin_idx, len(string))
+        
+            
+    def tokenize_gen_alpha_digit(self, string):
+        """
+        This method splits original string into tokens and
+        generates only ALPHA and NUMBER types of tokens
+        @param string: a sequence of characters to be tokenized
+        @yield list of objects containing token information - class Token:
+        - Token;
+        - Token type;
+        - First and last indexes in original string
+        """
+        for token in list(self.tokenize_gen_with_token_types(string)):
+            if token.token_type == TokenType.ALPHA or token.token_type == TokenType.NUMBER:
+                yield token
+
 class TokenType(Enum):
     """
     Class enumerating token types
@@ -150,6 +235,7 @@ class Token(object):
 
         
 def main():
+    """
     t = StringTokenizer()
     string = 'Mother loves me 2, she clears the window! (joke) Ha-ha!?'
     print(t.tokenize(string))
@@ -157,10 +243,14 @@ def main():
     print(result)
     result = t.tokenize_with_token_types(string)
     print(result)
+    """
+    tg = StringTokenGenerator()
+    string = 'Mother loves me 2, she clears the window! (joke) Ha-ha!?'
+    gen1 = list(tg.tokenize_gen(string))
+    gen2 = list(tg.tokenize_gen_alpha_digit(string))
+    print(gen1)
+    print(gen2)
     
 
 if __name__ == '__main__':
     main()
-
-
-

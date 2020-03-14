@@ -1,8 +1,66 @@
 import unittest
 import string_to_alpha0
+from string_to_alpha0 import StringTokenGenerator
 from string_to_alpha0 import StringTokenizer
 from string_to_alpha0 import TokenType
 from string_to_alpha0 import Token
+          
+class TestStringTokenGenerator(unittest.TestCase):
+
+     def setUp(self):
+         self.t = StringTokenGenerator()
+
+
+     def test_class_mother_string(self):
+          s = 'mother cleans the window'
+          self.assertEqual(list(self.t.tokenize_gen(s)),
+                       ['mother', 'cleans', 'the', 'window'])
+
+     def test_class_empty_string(self):
+          s = ''
+          self.assertEqual(list(self.t.tokenize_gen(s)), [])
+
+     def test_class_no_spaces_string(self):
+          s = 'mothercleansthewindow'
+          self.assertEqual(list(self.t.tokenize_gen(s)),
+                       ['mothercleansthewindow'])
+
+     def test_class_digital_string(self):
+          s = '012345'
+          self.assertEqual(list(self.t.tokenize_gen(s)), [])
+
+     def test_class_delimiters_string(self):
+          s = 'mother_cleans+the-window'
+          self.assertEqual(list(self.t.tokenize_gen(s)),
+                       ['mother', 'cleans', 'the', 'window'])    
+
+class TestStringTokenGeneratorAlphaDigit(unittest.TestCase):
+
+     def setUp(self):
+         self.t = StringTokenGenerator()
+
+     def test_alpha_string(self):
+          s = 'mother cleans the window'
+          self.assertEqual(list(self.t.tokenize_gen_alpha_digit(s))[0],
+                       Token("mother", TokenType.ALPHA, 0, 6))
+          self.assertEqual(len(list(self.t.tokenize_gen_alpha_digit(s))), 7)
+
+     def test_class_empty_string(self):
+          s = ''
+          self.assertEqual(list(self.t.tokenize_gen_alpha_digit(s)), [])
+
+     def test_digit_string(self):
+          s = '2 mothers clean 100 windows!!!'
+          self.assertEqual(list(self.t.tokenize_gen_alpha_digit(s))[0],
+                       Token("2", TokenType.NUMBER, 0, 1))
+          self.assertEqual(len(list(self.t.tokenize_gen_alpha_digit(s))), 5)
+          
+     def test_alpha_string(self):
+          s = 'мама мыла раму'
+          self.assertEqual(list(self.t.tokenize_gen_alpha_digit(s))[0],
+                       Token("мама", TokenType.ALPHA, 0, 4))
+          self.assertEqual(len(list(self.t.tokenize_gen_alpha_digit(s))), 3)
+
 
 class TestStringTokenizerWithTypes(unittest.TestCase):
 
